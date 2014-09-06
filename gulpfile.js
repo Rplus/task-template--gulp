@@ -36,7 +36,7 @@ gulp.task('watch', ['html', 'css'], function () {
 });
 
 gulp.task('deploy', function () {
-  gulp.src(build_path + '/**/*`')
+  gulp.src(build_path + '/**/*')
     .pipe($.ghPages());
 });
 
