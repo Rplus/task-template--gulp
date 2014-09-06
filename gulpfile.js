@@ -26,6 +26,7 @@ gulp.task('css', function () {
 
 gulp.task('js', function () {
   return gulp.src('app/script/**/*.js')
+    .pipe($.plumber())
     .pipe($.concat('script.js'))
     .pipe($.uglify())
     .pipe(gulp.dest(build_path + '/js'))
