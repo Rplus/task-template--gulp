@@ -50,7 +50,7 @@ gulp.task('watch', ['html', 'css', 'js'], function () {
   gulp.watch('app/style/**/*.styl', ['css']);
 });
 
-gulp.task('deploy', function () {
+gulp.task('deploy', ['png-min'], function () {
   gulp.src(build_path + '/**/*')
     .pipe($.ghPages());
 });
