@@ -28,6 +28,8 @@ gulp.task('js', function () {
   return gulp.src('app/script/**/*.js')
     .pipe($.plumber())
     .pipe($.concat('script.js'))
+    .pipe($.jshint())
+    .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.uglify())
     .pipe(gulp.dest(build_path + '/js'))
     .pipe(connect.reload());
