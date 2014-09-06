@@ -32,9 +32,14 @@ gulp.task('js', function () {
     .pipe(connect.reload());
 });
 
-gulp.task('png-min', function () {
-  return gulp.src('app/images/**/*.png')
+gulp.task('png-min', ['png-clone-no-compress'],function () {
+  return gulp.src(['app/images/**/*.png', '!app/images/**/*-no-compress.png'])
     .pipe($.optipng(['-o2', '-strip all']))
+    .pipe(gulp.dest(build_path + '/img'));
+});
+
+gulp.task('png-clone-no-compress', function () {
+  return gulp.src(['app/images/**/*-no-compress.png'])
     .pipe(gulp.dest(build_path + '/img'));
 });
 
