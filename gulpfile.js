@@ -32,6 +32,12 @@ gulp.task('js', function () {
     .pipe(connect.reload());
 });
 
+gulp.task('png-min', function () {
+  return gulp.src('app/images/**/*.png')
+    .pipe($.optipng(['-o2', '-strip all']))
+    .pipe(gulp.dest(build_path + '/img'));
+});
+
 gulp.task('server', function () {
   connect.server({
     livereload: true
