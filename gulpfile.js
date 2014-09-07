@@ -20,6 +20,8 @@ var path = (function () {
   return _path;
 })();
 
+
+
 gulp.task('html', function () {
   return gulp.src(path.sourceHtml + '*.html')
     .pipe($.plumber())
@@ -29,6 +31,8 @@ gulp.task('html', function () {
     .pipe(gulp.dest(path.build))
     .pipe(connect.reload());
 });
+
+
 
 gulp.task('css', function () {
   return gulp.src(path.sourceStyle + 'style.styl')
@@ -42,6 +46,8 @@ gulp.task('css', function () {
     .pipe(connect.reload());
 });
 
+
+
 gulp.task('js', function () {
   return gulp.src(path.sourceScript + '**/*.js')
     .pipe($.plumber())
@@ -53,16 +59,22 @@ gulp.task('js', function () {
     .pipe(connect.reload());
 });
 
+
+
 gulp.task('png-min', ['png-clone-no-compress'],function () {
   return gulp.src([path.sourceImage + '**/*.png', '!' + path.sourceImage + '**/*-no-compress.png'])
     .pipe($.optipng(['-o2', '-strip all']))
     .pipe(gulp.dest(path.build + 'img/'));
 });
 
+
+
 gulp.task('png-clone-no-compress', function () {
   return gulp.src([path.sourceImage + '**/*-no-compress.png'])
     .pipe(gulp.dest(path.build + 'img/'));
 });
+
+
 
 gulp.task('iconfont', function () {
   return gulp.src(path.source + 'font/svg/*.svg')
@@ -86,6 +98,8 @@ gulp.task('iconfont', function () {
     })
     .pipe(gulp.dest(path.build + 'font/'));
 });
+
+
 
 gulp.task('server', function () {
   connect.server({
