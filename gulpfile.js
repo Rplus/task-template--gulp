@@ -92,6 +92,6 @@ gulp.task('deploy', ['png-min'], function () {
     .pipe($.ghPages());
 });
 
-gulp.task('build', ['html', 'css', 'js']);
+gulp.task('build', ['iconfont', 'html', 'css', 'js']);
 gulp.task('dev', ['server', 'watch']);
 gulp.task('default', ['build']);
