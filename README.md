@@ -37,3 +37,11 @@ deploy 時會摻一起送到 `_publish/` 下
 
 + `deploy`: 將目前 branch 的內容丟到 github brach `gp-pages` 上，可當簡易的靜態網頁 host  
   ex: iconfont test page: <http://rplus.github.io/task-template--gulp/>
+
+
+---
+
+ref:
+
++ <https://github.com/appleboy/slush-html5-template>
++ <https://github.com/g0v/g0v.tw>
