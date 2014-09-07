@@ -33,7 +33,7 @@ deploy 時會摻一起送到 `_publish/` 下
   目前是寫成 mixin + chart-map + placeholder 的形式，  
   要用時，再 include 就好，這部份的範例可以切到 `test-iconfont` 的 branch 上看
 
-+ `server`, `watch`: 處理 livereload
++ `server`, `watch`: 執行 `dulp dev` 可 localhost 並處理 livereload
 
 + `deploy`: 將目前 branch 的內容丟到 github brach `gp-pages` 上，可當簡易的靜態網頁 host  
   ex: iconfont test page: <http://rplus.github.io/task-template--gulp/>
