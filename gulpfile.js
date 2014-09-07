@@ -16,6 +16,13 @@ var path = (function () {
   _path.sourceStyle = _path.source + 'style/';
   _path.sourceScript = _path.source + 'script/';
   _path.sourceImage = _path.source + 'images/';
+  _path.sourceFont = _path.source + 'font/';
+
+  _path.buildHtml = _path.build;
+  _path.buildStyle = _path.build + 'css/';
+  _path.buildScript = _path.build + 'js/';
+  _path.buildImage = _path.build + 'img/';
+  _path.buildFont = _path.build + 'font/';
 
   return _path;
 })();
@@ -28,7 +35,7 @@ gulp.task('html', function () {
     .pipe($.minifyHtml({
       quotes: true
     }))
-    .pipe(gulp.dest(path.build))
+    .pipe(gulp.dest(path.buildHtml))
     .pipe(connect.reload());
 });
 
@@ -42,7 +49,7 @@ gulp.task('css', function () {
     }))
     .pipe($.autoprefixer())
     .pipe($.minifyCss())
-    .pipe(gulp.dest(path.build + 'css/'))
+    .pipe(gulp.dest(path.buildStyle))
     .pipe(connect.reload());
 });
 
@@ -55,7 +62,7 @@ gulp.task('js', function () {
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.uglify())
-    .pipe(gulp.dest(path.build + 'js/'))
+    .pipe(gulp.dest(path.buildScript))
     .pipe(connect.reload());
 });
 
@@ -64,20 +71,20 @@ gulp.task('js', function () {
 gulp.task('png-min', ['png-clone-no-compress'],function () {
   return gulp.src([path.sourceImage + '**/*.png', '!' + path.sourceImage + '**/*-no-compress.png'])
     .pipe($.optipng(['-o2', '-strip all']))
-    .pipe(gulp.dest(path.build + 'img/'));
+    .pipe(gulp.dest(path.buildImage));
 });
 
 
 
 gulp.task('png-clone-no-compress', function () {
   return gulp.src([path.sourceImage + '**/*-no-compress.png'])
-    .pipe(gulp.dest(path.build + 'img/'));
+    .pipe(gulp.dest(path.buildImage));
 });
 
 
 
 gulp.task('iconfont', function () {
-  return gulp.src(path.source + 'font/svg/*.svg')
+  return gulp.src(path.sourceFont + 'svg/*.svg')
     .pipe($.iconfont({
       fontName: 'myfont',
       // centerHorizontally: true,
@@ -94,9 +101,9 @@ gulp.task('iconfont', function () {
           className: 'appicon'
         }))
         .pipe($.rename(iconfont.stylusFileName))
-        .pipe(gulp.dest(path.sourceStyle + 'tmp'));
+        .pipe(gulp.dest(path.sourceStyle + 'tmp/'));
     })
-    .pipe(gulp.dest(path.build + 'font/'));
+    .pipe(gulp.dest(path.buildFont));
 });
 
 
