@@ -4,6 +4,10 @@ var gulp = require('gulp'),
 
 var build_path = '_publish';
 
+var iconfont = {
+  stylusFileName: '_font.styl'
+};
+
 gulp.task('html', function () {
   return gulp.src('app/html/*.html')
     .pipe($.plumber())
@@ -17,7 +21,9 @@ gulp.task('html', function () {
 gulp.task('css', function () {
   return gulp.src('app/style/style.styl')
     .pipe($.plumber())
-    .pipe($.stylus())
+    .pipe($.stylus({
+      import: ['tmp/' + iconfont.stylusFileName]
+    }))
     .pipe($.autoprefixer())
     .pipe($.minifyCss())
     .pipe(gulp.dest(build_path + '/css'))
@@ -44,6 +50,29 @@ gulp.task('png-min', ['png-clone-no-compress'],function () {
 gulp.task('png-clone-no-compress', function () {
   return gulp.src(['app/images/**/*-no-compress.png'])
     .pipe(gulp.dest(build_path + '/img'));
+});
+
+gulp.task('iconfont', function () {
+  return gulp.src('app/font/svg/*.svg')
+    .pipe($.iconfont({
+      fontName: 'myfont',
+      // centerHorizontally: true,
+      // appendCodepoints: true,
+      fixedWidth: true
+    }))
+    .on('codepoints', function(codepoints, options) {
+      // console.log(codepoints, options);
+      gulp.src('app/style/_font.styl-temp')
+        .pipe($.consolidate('lodash', {
+          glyphs: codepoints,
+          fontName: 'myfont',
+          fontPath: '../font/',
+          className: 'appicon'
+        }))
+        .pipe($.rename(iconfont.stylusFileName))
+        .pipe(gulp.dest('app/style/tmp'));
+    })
+    .pipe(gulp.dest(build_path + '/font'));
 });
 
 gulp.task('server', function () {
