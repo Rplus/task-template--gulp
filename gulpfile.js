@@ -2,58 +2,89 @@ var gulp = require('gulp'),
   connect = require('gulp-connect'),
   $ = require('gulp-load-plugins')();
 
-var build_path = '_publish';
-
 var iconfont = {
   stylusFileName: '_font.styl'
 };
 
+var path = (function () {
+  var _path = {
+    source: 'app/',
+    build: '_publish/'
+  };
+
+  _path.sourceHtml = _path.source + 'html/';
+  _path.sourceStyle = _path.source + 'style/';
+  _path.sourceScript = _path.source + 'script/';
+  _path.sourceImage = _path.source + 'images/';
+  _path.sourceFont = _path.source + 'font/';
+
+  _path.buildHtml = _path.build;
+  _path.buildStyle = _path.build + 'css/';
+  _path.buildScript = _path.build + 'js/';
+  _path.buildImage = _path.build + 'img/';
+  _path.buildFont = _path.build + 'font/';
+
+  return _path;
+})();
+
+
+
 gulp.task('html', function () {
-  return gulp.src('app/html/*.html')
+  return gulp.src(path.sourceHtml + '*.html')
     .pipe($.plumber())
     .pipe($.minifyHtml({
       quotes: true
     }))
-    .pipe(gulp.dest(build_path))
+    .pipe(gulp.dest(path.buildHtml))
     .pipe(connect.reload());
 });
 
+
+
 gulp.task('css', function () {
-  return gulp.src('app/style/style.styl')
+  return gulp.src(path.sourceStyle + 'style.styl')
     .pipe($.plumber())
     .pipe($.stylus({
       import: ['tmp/' + iconfont.stylusFileName]
     }))
     .pipe($.autoprefixer())
     .pipe($.minifyCss())
-    .pipe(gulp.dest(build_path + '/css'))
+    .pipe(gulp.dest(path.buildStyle))
     .pipe(connect.reload());
 });
 
+
+
 gulp.task('js', function () {
-  return gulp.src('app/script/**/*.js')
+  return gulp.src(path.sourceScript + '**/*.js')
     .pipe($.plumber())
     .pipe($.concat('script.js'))
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.uglify())
-    .pipe(gulp.dest(build_path + '/js'))
+    .pipe(gulp.dest(path.buildScript))
     .pipe(connect.reload());
 });
 
+
+
 gulp.task('png-min', ['png-clone-no-compress'],function () {
-  return gulp.src(['app/images/**/*.png', '!app/images/**/*-no-compress.png'])
+  return gulp.src([path.sourceImage + '**/*.png', '!' + path.sourceImage + '**/*-no-compress.png'])
     .pipe($.optipng(['-o2', '-strip all']))
-    .pipe(gulp.dest(build_path + '/img'));
+    .pipe(gulp.dest(path.buildImage));
 });
+
+
 
 gulp.task('png-clone-no-compress', function () {
-  return gulp.src(['app/images/**/*-no-compress.png'])
-    .pipe(gulp.dest(build_path + '/img'));
+  return gulp.src([path.sourceImage + '**/*-no-compress.png'])
+    .pipe(gulp.dest(path.buildImage));
 });
 
+
+
 gulp.task('iconfont', function () {
-  return gulp.src('app/font/svg/*.svg')
+  return gulp.src(path.sourceFont + 'svg/*.svg')
     .pipe($.iconfont({
       fontName: 'myfont',
       // centerHorizontally: true,
@@ -62,7 +93,7 @@ gulp.task('iconfont', function () {
     }))
     .on('codepoints', function(codepoints, options) {
       // console.log(codepoints, options);
-      gulp.src('app/style/_font.styl-temp')
+      gulp.src(path.sourceStyle + '_font.styl-temp')
         .pipe($.consolidate('lodash', {
           glyphs: codepoints,
           fontName: 'myfont',
@@ -70,10 +101,12 @@ gulp.task('iconfont', function () {
           className: 'appicon'
         }))
         .pipe($.rename(iconfont.stylusFileName))
-        .pipe(gulp.dest('app/style/tmp'));
+        .pipe(gulp.dest(path.sourceStyle + 'tmp/'));
     })
-    .pipe(gulp.dest(build_path + '/font'));
+    .pipe(gulp.dest(path.buildFont));
 });
+
+
 
 gulp.task('server', function () {
   connect.server({
@@ -82,13 +115,13 @@ gulp.task('server', function () {
 });
 
 gulp.task('watch', ['build'], function () {
-  gulp.watch('app/html/*.html', ['html']);
-  gulp.watch('app/script/*.js', ['js']);
-  gulp.watch('app/style/**/*.styl', ['css']);
+  gulp.watch(path.sourceHtml + '*.html', ['html']);
+  gulp.watch(path.sourceScript + '*.js', ['js']);
+  gulp.watch(path.sourceStyle + '**/*.styl', ['css']);
 });
 
 gulp.task('deploy', ['build', 'png-min'], function () {
-  gulp.src(build_path + '/**/*')
+  gulp.src(path.build + '**/*')
     .pipe($.ghPages());
 });
 
