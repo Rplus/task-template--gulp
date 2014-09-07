@@ -81,13 +81,13 @@ gulp.task('server', function () {
   });
 });
 
-gulp.task('watch', ['html', 'css', 'js'], function () {
+gulp.task('watch', ['build'], function () {
   gulp.watch('app/html/*.html', ['html']);
   gulp.watch('app/script/*.js', ['js']);
   gulp.watch('app/style/**/*.styl', ['css']);
 });
 
-gulp.task('deploy', ['png-min'], function () {
+gulp.task('deploy', ['build', 'png-min'], function () {
   gulp.src(build_path + '/**/*')
     .pipe($.ghPages());
 });
