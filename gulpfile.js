@@ -1,6 +1,6 @@
-var gulp = require('gulp'),
-  connect = require('gulp-connect'),
-  $ = require('gulp-load-plugins')();
+var gulp = require('gulp');
+var connect = require('gulp-connect');
+var $ = require('gulp-load-plugins')();
 
 var path = (function () {
   var _path = {
