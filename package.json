@@ -28,7 +28,6 @@
     "gulp-load-plugins": "^0.6.0",
     "gulp-minify-css": "^0.3.8",
     "gulp-minify-html": "^0.1.5",
-    "gulp-optipng": "0.0.2",
     "gulp-plumber": "^0.6.5",
     "gulp-rename": "^1.2.0",
     "gulp-stylus": "^1.3.0",
