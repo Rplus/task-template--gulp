@@ -1,6 +1,7 @@
 var gulp = require('gulp');
-var connect = require('gulp-connect');
 var $ = require('gulp-load-plugins')();
+var browserSync = require('browser-sync');
+var reload = browserSync.reload;
 
 var path = (function () {
   var _path = {
@@ -32,7 +33,6 @@ gulp.task('html', function () {
       quotes: true
     }))
     .pipe(gulp.dest(path.buildHtml))
-    .pipe(connect.reload());
 });
 
 
@@ -43,7 +43,6 @@ gulp.task('css', function () {
     .pipe($.autoprefixer())
     .pipe($.minifyCss())
     .pipe(gulp.dest(path.buildStyle))
-    .pipe(connect.reload());
 });
 
 
@@ -56,22 +55,27 @@ gulp.task('js', function () {
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.uglify())
     .pipe(gulp.dest(path.buildScript))
-    .pipe(connect.reload());
 });
 
 
 
-gulp.task('server', function () {
-  connect.server({
-    livereload: true
+// Watch Files For Changes & Reload
+gulp.task('serve', ['default'], function () {
+  browserSync({
+    notify: false,
+    // Run as an https by uncommenting 'https: true'
+    // Note: this uses an unsigned certificate which on first access
+    //       will present a certificate warning in the browser.
+    // https: true,
+    server: ['_publish']
   });
+
+  gulp.watch(path.sourceHtml + '*.html', ['html'], reload);
+  gulp.watch(path.sourceScript + '*.js', ['js'], reload);
+  gulp.watch(path.sourceStyle + '**/*.styl', ['css'], reload);
 });
 
-gulp.task('watch', ['build'], function () {
-  gulp.watch(path.sourceHtml + '*.html', ['html']);
-  gulp.watch(path.sourceScript + '*.js', ['js']);
-  gulp.watch(path.sourceStyle + '**/*.styl', ['css']);
-});
+
 
 gulp.task('deploy', ['build'], function () {
   gulp.src(path.build + '**/*')
@@ -79,5 +83,4 @@ gulp.task('deploy', ['build'], function () {
 });
 
 gulp.task('build', ['html', 'css', 'js']);
-gulp.task('dev', ['server', 'watch']);
 gulp.task('default', ['build']);
