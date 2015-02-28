@@ -61,21 +61,6 @@ gulp.task('js', function () {
 
 
 
-gulp.task('png-min', ['png-clone-no-compress'],function () {
-  return gulp.src([path.sourceImage + '**/*.png', '!' + path.sourceImage + '**/*-no-compress.png'])
-    .pipe($.optipng(['-o2', '-strip all']))
-    .pipe(gulp.dest(path.buildImage));
-});
-
-
-
-gulp.task('png-clone-no-compress', function () {
-  return gulp.src([path.sourceImage + '**/*-no-compress.png'])
-    .pipe(gulp.dest(path.buildImage));
-});
-
-
-
 gulp.task('server', function () {
   connect.server({
     livereload: true
@@ -88,7 +73,7 @@ gulp.task('watch', ['build'], function () {
   gulp.watch(path.sourceStyle + '**/*.styl', ['css']);
 });
 
-gulp.task('deploy', ['build', 'png-min'], function () {
+gulp.task('deploy', ['build'], function () {
   gulp.src(path.build + '**/*')
     .pipe($.ghPages());
 });
