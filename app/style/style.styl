@@ -1,3 +1,38 @@
+html, body {
+    height 100%
+}
+
 body {
+    position: relative
+    margin: 0
     background-color: #ffc;
+}
+
+.box {
+    position: absolute
+    bottom 0
+    right 0
+    left 0
+    top 0
+    margin auto
+    width 300px
+    height: @width;
+    background-color: hsl(255,100%,50%);
+}
+
+.mask {
+    position: absolute
+    top 0
+    left 0
+    right 0
+    bottom 0
+}
+
+.dot {
+    position: absolute
+    top 10%
+    left 10%
+    width 1px
+    height: @width
+    outline 1px solid #333
 }
