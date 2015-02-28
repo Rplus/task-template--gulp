@@ -2,10 +2,6 @@ var gulp = require('gulp'),
   connect = require('gulp-connect'),
   $ = require('gulp-load-plugins')();
 
-var iconfont = {
-  stylusFileName: '_font.styl'
-};
-
 var path = (function () {
   var _path = {
     source: 'app/',
@@ -44,9 +40,6 @@ gulp.task('html', function () {
 gulp.task('css', function () {
   return gulp.src(path.sourceStyle + 'style.styl')
     .pipe($.plumber())
-    .pipe($.stylus({
-      import: ['tmp/' + iconfont.stylusFileName]
-    }))
     .pipe($.autoprefixer())
     .pipe($.minifyCss())
     .pipe(gulp.dest(path.buildStyle))
@@ -83,31 +76,6 @@ gulp.task('png-clone-no-compress', function () {
 
 
 
-gulp.task('iconfont', function () {
-  return gulp.src(path.sourceFont + 'svg/*.svg')
-    .pipe($.iconfont({
-      fontName: 'myfont',
-      // centerHorizontally: true,
-      // appendCodepoints: true,
-      fixedWidth: true
-    }))
-    .on('codepoints', function(codepoints, options) {
-      // console.log(codepoints, options);
-      gulp.src(path.sourceStyle + '_font.styl-temp')
-        .pipe($.consolidate('lodash', {
-          glyphs: codepoints,
-          fontName: 'myfont',
-          fontPath: '../font/',
-          className: 'appicon'
-        }))
-        .pipe($.rename(iconfont.stylusFileName))
-        .pipe(gulp.dest(path.sourceStyle + 'tmp/'));
-    })
-    .pipe(gulp.dest(path.buildFont));
-});
-
-
-
 gulp.task('server', function () {
   connect.server({
     livereload: true
@@ -125,6 +93,6 @@ gulp.task('deploy', ['build', 'png-min'], function () {
     .pipe($.ghPages());
 });
 
-gulp.task('build', ['iconfont', 'html', 'css', 'js']);
+gulp.task('build', ['html', 'css', 'js']);
 gulp.task('dev', ['server', 'watch']);
 gulp.task('default', ['build']);
